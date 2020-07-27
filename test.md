@@ -10,7 +10,7 @@ git log --oneline
 ## revert
 修改之前某个版本的内容而保存之后版本的更改
 一开始依旧查看版本 id
-然后用
+进行更改
 '''
 git revert -n 版本号
 
