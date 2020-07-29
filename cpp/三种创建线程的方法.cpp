@@ -2,7 +2,7 @@
 * @Author: Luoxin
 * @Email: luoxin9712@163.com
 * @Created  time: 2020-07-28 21:03:15
-* @Modified time: 2020-07-28 22:12:22
+* @Modified time: 2020-07-29 12:33:22
 * @Content: 创建线程的三种方法
 */
 
@@ -25,6 +25,10 @@ public:
 	void operator()(){
 		cout << this_thread::get_id() << "The second child thread: " << num << endl;
 	}
+
+	void f(int i){
+		cout << this_thread::get_id() << "The second child thread: " << i << endl;
+	}
 };
 
 
@@ -39,10 +43,12 @@ int main(){
 	thread t2_1(th2obj); // 注意如果不加 ref() 则是以值传递
 	thread t2_2{CA(8)};
 	thread t2_3((CA(9)));
+	thread t2_4(&CA::f, th2obj, 9); // 这种应该是算用第一种方法，只不过用的是类的成员函数
 
 	t2_1.join();
 	t2_2.join();
 	t2_3.join();
+	t2_4.join();
 
 	// 第三种方法，用 lamada 函数
 	thread t3([]{cout << "The third child thread!" << endl;});
@@ -58,9 +64,10 @@ int main(){
 * 
 * 运行结果为：
 * The first child thread
-* 140537257912064The second child thread: 6
-* 140537249519360The second child thread: 8
-* 140537168393984The second child thread: 9
+* 140199419246336The second child thread: 6
+* 140199342372608The second child thread: 8
+* 140199333979904The second child thread: 9
+* 140199325587200The second child thread: 9
 * The third child thread!
 * 
 */
