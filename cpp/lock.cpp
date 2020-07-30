@@ -2,8 +2,27 @@
 * @Author: Luoxin
 * @Email: luoxin9712@163.com
 * @Created  time: 2020-07-29 21:20:48
-* @Modified time: 2020-07-29 23:07:19
-* @Content:  锁
+* @Modified time: 2020-07-30 09:36:56
+* @Content:  锁 
+* 			 ① mu.lock(), mu.unlock(),
+* 			 ② lock_guard<mutex> locker(mu), 
+*			 ③ lock(mu1, mu2)
+*			   lock_guard<mutex> locker1(mu1, adopt_lock)
+*			   lock_guard<mutex> locker2(mu2, adopt_lock)
+* 			 ④ unique_lock<mutex> locker(mu) 可以再添加一个defer_lock参数
+*			   用 locker.lock() locker.unlock() 锁住想同步的部分
+* 			_____________________________________________________
+*				lock_guard 和 unique_lock 的异同：
+*					都不可以复制，但unique_lock可以移动
+* 					即可以用 unique_lock<mutex> locker2 = move(locker)
+*					但 unique_lock 消耗更多资源
+* 					**unique_lock 可以自由地开锁关锁，而 lock_guard 则只在构造和析构时开关锁
+*			 		most of the time std::lock_guard is enough.
+*  			____________________________________________________
+*				另外，谈到了 call_once 配合 once_flag 使用
+*				once_flad fg1;
+*				call_once(fg1, func) 后面还可以接 func 所需要的参数
+*				使用场景在于，使不论多少线程调用，call_once 所绑定的fg1只执行一次
 */
 
 
