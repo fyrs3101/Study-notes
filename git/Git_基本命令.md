@@ -37,6 +37,18 @@
 
 
 
+## 工作区和暂存区
+
+电脑里能看到的目录就是工作区
+
+stage 是暂存区
+
+git add 添加文件，实际上就是把文件修改添加到暂存区
+
+git commit 是将暂存区的所有内容提交到当前分支
+
+![](./工作区暂存区.jpeg)
+
 ## 其他命令
 
 -    `git status`
@@ -121,5 +133,94 @@
     $ git log --since="2020-08-01 22:00"
     ```
 
--   
+-   `git diff`
 
+    -   **比较工作区与暂存区**
+
+        ```bash
+        $ git diff
+        ```
+
+        不加任何参数
+        
+    -   **比较暂存区与最新本地仓库**
+    
+        ```bash
+        $ git diff --cached [<path>...]
+        ```
+    
+    -   **比较工作区与最新本地版本库**
+    
+        ```bash
+        $ git diff HEAD [<path>...]
+        ```
+    
+    -   **比较工作区与指定 commit-id 的差异**
+    
+        ```bash
+        $ git diff commit-id [<path>...]
+        ```
+    
+    -   **比较暂存区与指定 commit-id 的差异**
+    
+        ```bash
+        $ git diff --cached commit-id [<path>...]
+        ```
+    
+    -   **比较两个 commit-id  的差异**
+    
+        ```bash
+        $ git diff commit-id commit-id
+        ```
+    
+    -   **打补丁**
+    
+        不懂，以后用到再加
+
+-   **查看、创建和合并分支**
+
+    -   查看分支
+
+        ```bash
+        $ git branch
+        ```
+
+        输出结果中带 * 号的为当前分支
+
+    -   创建分支
+
+        ```bash
+        $ git branch <name>
+        ```
+
+    -   切换分支
+
+        ```bash
+        $ git checkout <name> 
+        $ git switch <name>
+        ```
+
+        以上两行代码任一行都可以
+
+    -   创建+切换分支
+
+        ```bash
+        $ git checkout -b <name>
+        $ git switch -c <name>
+        ```
+
+        以上两行代码任一行都可以
+
+    -   合并某分支到当前分支
+
+        ```bash
+        $ git merge <name>
+        ```
+
+    -   删除分支
+
+        ```bash
+        $ git branch -d <name>
+        ```
+
+        
