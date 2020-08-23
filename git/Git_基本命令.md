@@ -222,10 +222,3 @@ git commit 是将暂存区的所有内容提交到当前分支
         ```bash
         $ git branch -d <name>
         ```
-<<<<<<< HEAD
-        
-=======
-
-
-
->>>>>>> gitnote
