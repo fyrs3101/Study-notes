@@ -77,6 +77,35 @@ const 在 * 前，是底层 const，p 所指的内容是常量；
 
 const 在 * 后，是顶层 const，p 是常量，不可改变指向。
 
+- **要注意 const** **修饰多级指针的问题**
+
+  ```c
+  void foo(const char **p){ }
+  
+  int main(int argc, char ** argv){
+      foo(argv);
+  }
+  ```
+
+  这段程序会有一个 warning，提示参数与原型不匹配。
+
+  正解应该是将第一行替换成以下任意一种
+
+  ```c
+  void foo(char * const * p){}
+  void foo(char ** const p){}
+  ```
+
+  `const char ** p` 是指向有 const 限定符的 char 类型的指针的指针，即 char 是 const。
+
+  >由于 `char **` 和 `const char **` 都是没有限定符的指针类型，但他们所指向的类型不一样（前者指向 `char *` ，后者指向 `const char *` ，因此他们是不相容的。因此，类型为 `char**` 的实参与类型为 `const char **`，是不相容的。
+  >
+  >
+  >
+  >------以上摘自 《C 专家编程》P20
+
+  
+
 ### const 修饰对象
 
 `const A a(42,38);` 整个对象的值是不能被修改的
