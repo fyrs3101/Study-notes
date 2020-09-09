@@ -2,7 +2,7 @@
 * @Author: Luoxin
 * @Email: luoxin9712@163.com
 * @Created  time: 2020-07-30 09:29:50
-* @Modified time: 2020-07-30 11:09:41
+* @Modified time: 2020-09-09 09:41:30
 * @Content: 条件变量
 *			只能搭配 unique_lock 使用，因为要自定义开关锁
 */
@@ -40,6 +40,7 @@ void func2() {
 		unique_lock<mutex> locker2(mu);
 		// 此处 wait 不断的对互斥量进行加减锁
 		cond.wait(locker2, [](){return !q.empty();}); // 等待 func1 的通知，以及条件为 true； 
+		// wait 传入第二个参数（本例中即 lamada 函数）的目的是防止假唤醒，只有互斥量被 notify 以及第二个参数为 true 时才唤醒
 		// cond.wait(locker, [](){return sign;}); // 如果执行此行，则将一直等待
 		data = q.back();
 		q.pop_back();

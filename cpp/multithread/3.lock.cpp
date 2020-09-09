@@ -2,15 +2,20 @@
 * @Author: Luoxin
 * @Email: luoxin9712@163.com
 * @Created  time: 2020-07-29 21:20:48
-* @Modified time: 2020-07-30 09:36:56
+* @Modified time: 2020-09-08 21:27:19
 * @Content:  锁 
 * 			 ① mu.lock(), mu.unlock(),
 * 			 ② lock_guard<mutex> locker(mu), 
 *			 ③ lock(mu1, mu2)
 *			   lock_guard<mutex> locker1(mu1, adopt_lock)
 *			   lock_guard<mutex> locker2(mu2, adopt_lock)
-* 			 ④ unique_lock<mutex> locker(mu) 可以再添加一个defer_lock参数
+* 			 ④ unique_lock<mutex> locker(mu) 
 *			   用 locker.lock() locker.unlock() 锁住想同步的部分
+*				以下对 unique_lock 传入的参数进行讨论
+*				在std::unique_lock类的对象在构造时接受一个互斥量作为参数，对该互斥量进行上锁操作。
+*				接受一个互斥量和std::defer_lock作为参数，则不对该互斥量进行上锁。
+*				接受一个互斥量和std::try_to_lock作为参数，则尝试对互斥量上锁，上锁失败时不会阻塞线程。
+*				接受一个互斥量和std::adopt_lock作为参数，则假定当前线程已经拥有互斥量的所有权。
 * 			_____________________________________________________
 *				lock_guard 和 unique_lock 的异同：
 *					都不可以复制，但unique_lock可以移动
@@ -57,7 +62,7 @@ void helper() {
 	}
 }
 
-// 此为优化后的第二种，即讲资源与互斥量绑定了
+// 此为优化后的第二种，即将资源与互斥量绑定了
 class Logfile {
 private:
 	mutex m_mutex;
@@ -92,7 +97,8 @@ void func2(Logfile& log) {
 // 在涉及两个以上的锁的时候，如果用的是 lock_guard，应该注意上锁的顺序应该相同
 // 或者，使用 lock(mu1, mu2);	
 // lock_guard<mutex> locker(mu1, adopt_lock);
-// lock_guard<mutex> locker2(mu2, adopt_lock);
+// lock_guard<mutex> locker2(mu2, adopt_lock); 
+// 注意 lock_guard 多了一个参数 adopt_lock
 // 此时，两个线程中对于 locker 和 locker2 的顺序就可以颠倒
 
 int main() {
@@ -113,9 +119,9 @@ int main() {
 	t2.join();
 	t3.join();
 	// 此时可以看到输出结果有序，说明互斥量没问题
-	// 但是如果将第 50 or 54 行代码注释掉，结果就会产生混乱
+	// 但是如果将第 70 or 74 行代码注释掉，结果就会产生混乱
 	// 说明不能在互斥量保护之后使用共享资源
-	// 另外该互斥量锁定了 f，仅仅时是限制了其他线程对 f 的访问
+	// 另外该互斥量锁定了 f，仅仅是限制了其他线程对 f 的访问
 	// 如果另外一个线程执行 ofstream mf; mf.open("test.txt", ios::app)
 	// 则仍可对 test.txt 进行写入，并不矛盾
 

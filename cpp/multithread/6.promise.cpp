@@ -2,7 +2,7 @@
 * @Author: Luoxin
 * @Email: luoxin9712@163.com
 * @Created  time: 2020-07-30 11:25:36
-* @Modified time: 2020-07-30 16:15:37
+* @Modified time: 2020-09-09 13:42:02
 * @Content:  promise
 *			 future 是主线程得到子线程(函数)返回的值
 * 			 promise 是子线程(函数)得到主线程所传递的值
@@ -40,14 +40,15 @@ int main() {
 
 	promise<int> p;
 	future<int> f=p.get_future();
-	shared_future<int> sf = move(f);
-
 	// future<int> fu = async(launch::async, factorial, ref(f));
+	// 使用上面一行语句时，要将第 24 行的函数形参改为 future<int>& f
+
+	shared_future<int> sf = move(f);
 	future<int> fu1 = async(launch::async, factorial, sf);
 	future<int> fu2 = async(launch::async, factorial, sf);
 	future<int> fu3 = async(launch::async, factorial, sf);
-	p.set_value(6);
 
+	p.set_value(6);
 	x= fu1.get();
 	cout << "x's value is : " << x << endl;
 	return 0;
