@@ -6,4 +6,8 @@ cpp 多线程相关知识
 
     https://www.bilibili.com/video/BV1xt411r7U2?from=search&seid=13148745087076367142
 
-2.  互联网
+2.	CPP-Concurrency-In-Action-2ed-2019
+
+	https://github.com/xiaoweiChen/CPP-Concurrency-In-Action-2ed-2019
+
+3.  互联网
