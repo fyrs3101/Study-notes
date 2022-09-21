@@ -14,6 +14,10 @@ hostname = app.bilibili.com
 
 var obj = JSON.parse($response.body);
 list = obj.data.items
-l = list.filter(x => x.ad_info == undefined)
-obj.data.items = l
+console.log("originLength: ", list.length)
+filter = list.filter(x => x.ad_info == undefined)
+console.log("filterLength: ", filter.length)
+ad = list.filter(x => !filter.includes(x))
+console.log(ad)
+obj.data.items = filter
 $done({body: JSON.stringify(obj)}); 
