@@ -18,6 +18,6 @@ console.log(list.length)
 var filter = list.filter(x => x.ad_info == undefined)
 console.log(filter.length)
 var ad = list.filter(x => !filter.includes(x))
-console.log(ad)
+console.log(JSON.stringify(ad))
 obj.data.items = filter
 $done({body: JSON.stringify(obj)}); 
