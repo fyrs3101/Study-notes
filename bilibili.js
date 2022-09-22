@@ -15,7 +15,7 @@ var obj = JSON.parse($response.body);
 console.log("filter begin")
 var list = obj.data.items
 console.log(list.length)
-var filter = list.filter(x => x.goto == "av")
+var filter = list.filter(x => x.goto == "av" || x.goto == "banner")
 console.log(filter.length)
 var ad = list.filter(x => !filter.includes(x))
 console.log(JSON.stringify(ad))
