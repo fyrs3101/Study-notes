@@ -31,12 +31,13 @@ $task.fetch(myRequest).then(response => {
     console.log("ok");
     res = JSON.parse(response.body).length;
     $notify("Success", "Subtitle", res);
+    console.log("end");
+    $done(myResponse);
 }, reason => {
     console.log("error");
     res = reason.error;
     $notify("Error", "Subtitle", res);
+    console.log("end");
+    $done(myResponse);
 });
 
-console.log("end");
-
-$done(myResponse);
