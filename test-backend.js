@@ -6,6 +6,7 @@ const url = 'https://api.github.com/users/luoxin971/repos';
 const method = 'GET';
 const myRequest = {
     url: url,
+    method: method,
     headers: headers
 };
 if (typeof($request) != "undefined") {
