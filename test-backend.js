@@ -26,18 +26,17 @@ const myResponse = {
     body: myData + "\n\n" + JSON.stringify($request.headers)
 };
 
-console.log("begin");
 $task.fetch(myRequest).then(response => {
     console.log("ok");
     res = JSON.parse(response.body).length;
     $notify("Success", "Subtitle", res.toString());
-    console.log("end"+res+"end");
+    myResponse['body'] = res + "" + Math.random().toString();
     $done(myResponse);
 }, reason => {
     console.log("error");
     res = reason.error;
-    $notify("Error", "Subtitle", "error");
-    console.log("end"+res+"end");
+    $notify("Error", "Subtitle", res);
+    myResponse['body'] = res;
     $done(myResponse);
 });
 
