@@ -6,7 +6,7 @@ h = {
     'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'
 }
 let resContent = "";
-https.get('https://api.github.com/users/luoxin971/repos', { headers: h }, (response) => {
+$task.get('https://api.github.com/users/luoxin971/repos', { headers: h }, (response) => {
     let todo = '';
 
     // called when a data chunk is received.
