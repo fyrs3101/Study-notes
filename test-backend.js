@@ -21,9 +21,11 @@ let resContent = "";
 $task.fetch(myRequest).then(response => {
     // response.statusCode, response.headers, response.body
     resContent = JSON.parse(response.body).length;
+    console.log("ok");
 }, reason => {
     // reason.error
     resContent = reason.error;
+    console.log("error");
 });
 
 const myStatus = "HTTP/1.1 200 OK";
