@@ -8,8 +8,7 @@ const myRequest = {
     url: url,
     headers: headers
 };
-console.log($prefs);
-if (typeof(exp) != "undefined") {
+if (typeof($request) != "undefined") {
     console.log($request.url);
     console.log($request.path);
     console.log($request.headers);
@@ -21,11 +20,9 @@ let resContent = "";
 $task.fetch(myRequest).then(response => {
     // response.statusCode, response.headers, response.body
     resContent = JSON.parse(response.body).length;
-    $notify("Success", "Subtitle", resContent); // Success!
 }, reason => {
     // reason.error
     resContent = reason.error;
-    $notify("Error", "Subtitle", reason.error); // Error!
 });
 
 const myStatus = "HTTP/1.1 200 OK";
@@ -35,7 +32,9 @@ let myData = "We got you.\n\n";
 const myResponse = {
     status: myStatus,
     headers: myHeaders,
-    body: myData + resContent
+    body: myData + resContent + "\n\n" + JSON.stringify($request.headers)
 };
+
+$notify("Test", "Subtitle", resContent); // Error!
 
 $done(myResponse);
