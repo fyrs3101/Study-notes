@@ -16,16 +16,6 @@ if (typeof($request) != "undefined") {
     console.log($request.body);
 }
 
-let resContent = "";
-
-$task.fetch(myRequest).then(response => {
-    console.log("ok");
-    resContent = JSON.parse(response.body).length;
-}, reason => {
-    console.log("error");
-    resContent = reason.error;
-});
-
 const myStatus = "HTTP/1.1 200 OK";
 const myHeaders = {"Connection": "Close"};
 let myData = "We got you.\n\n";
@@ -33,9 +23,20 @@ let myData = "We got you.\n\n";
 const myResponse = {
     status: myStatus,
     headers: myHeaders,
-    body: myData + resContent + "\n\n" + JSON.stringify($request.headers)
+    body: myData + "\n\n" + JSON.stringify($request.headers)
 };
 
-$notify("Test", "Subtitle", resContent);
+console.log("begin");
+$task.fetch(myRequest).then(response => {
+    console.log("ok");
+    res = JSON.parse(response.body).length;
+    $notify("Success", "Subtitle", res);
+}, reason => {
+    console.log("error");
+    res = reason.error;
+    $notify("Error", "Subtitle", res);
+});
+
+console.log("end");
 
 $done(myResponse);
