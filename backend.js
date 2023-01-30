@@ -1,5 +1,3 @@
-const https = require('https');
-
 h = {
     "X-GitHub-Api-Version": "2022-11-28",
     'Authorization': 'Bearer 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',
