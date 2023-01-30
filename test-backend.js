@@ -30,7 +30,7 @@ console.log("begin");
 $task.fetch(myRequest).then(response => {
     console.log("ok");
     res = JSON.parse(response.body).length;
-    $notify("Success", "Subtitle", "ok");
+    $notify("Success", "Subtitle", res.toString());
     console.log("end"+res+"end");
     $done(myResponse);
 }, reason => {
