@@ -9,15 +9,17 @@ const myRequest = {
     headers: headers
 };
 console.log($prefs);
-console.log($request.url);
-console.log($request.path);
-console.log($request.headers);
-console.log($request.body);
+if (typeof(exp) != "undefined") {
+    console.log($request.url);
+    console.log($request.path);
+    console.log($request.headers);
+    console.log($request.body);
+}
 
 $task.fetch(myRequest).then(response => {
     // response.statusCode, response.headers, response.body
-    console.log(response.body);
-    $notify("Title", "Subtitle", response.body); // Success!
+    console.log(response.body.length);
+    $notify("Title", "Subtitle", response.body.length); // Success!
     $done();
 }, reason => {
     // reason.error
