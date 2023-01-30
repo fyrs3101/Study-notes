@@ -16,14 +16,26 @@ if (typeof(exp) != "undefined") {
     console.log($request.body);
 }
 
+let resContent = "";
+
 $task.fetch(myRequest).then(response => {
     // response.statusCode, response.headers, response.body
-    console.log(response.body.length);
-    $notify("Title", "Subtitle", response.body.length); // Success!
-    $done();
+    resContent = JSON.parse(response.body).length;
+    $notify("Success", "Subtitle", resContent); // Success!
 }, reason => {
     // reason.error
-    console.log(reason.error);
-    $notify("Title", "Subtitle", reason.error); // Error!
-    $done();
+    resContent = reason.error;
+    $notify("Error", "Subtitle", reason.error); // Error!
 });
+
+const myStatus = "HTTP/1.1 200 OK";
+const myHeaders = {"Connection": "Close"};
+let myData = "We got you.\n\n";
+
+const myResponse = {
+    status: myStatus,
+    headers: myHeaders,
+    body: myData + resContent
+};
+
+$done(myResponse);
