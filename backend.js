@@ -5,7 +5,7 @@ h = {
     'Authorization': 'Bearer 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',
     'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'
 }
-const resContent = "";
+let resContent = "";
 https.get('https://api.github.com/users/luoxin971/repos', { headers: h }, (response) => {
     let todo = '';
 
