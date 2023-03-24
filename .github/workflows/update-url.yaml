@@ -20,7 +20,7 @@ jobs:
         for url in $URLS; do
           filename="$(echo $url | sed 's~http[s]*://~~g' | sed 's~www\.~~g').txt"
           curl -o $filename $url
-          gist_url=$(curl -s -X POST https://api.github.com/gists -H "Authorization: token $MY_TOKEN" -H "Content-Type: application/json" -d '{"files": {"'$filename'": {"content": "'$(cat $filename)'"}}, "public": true}' | grep -o '"html_url": ".*"' | cut -d'"' -f4)
-          echo $gist_url
+          gist_url=$(curl -s -X POST https://api.github.com/gists -H "Authorization: Bearer $MY_TOKEN" -H "Content-Type: application/json" -d '{"files": {"'$filename'": {"content": "'$(cat $filename)'"}}, "public": true}' | grep -o '"html_url": ".*"' | cut -d'"' -f4)
+          echo $(curl -s -X POST https://api.github.com/gists -H "Authorization: Bearer $MY_TOKEN" -H "Content-Type: application/json" -d '{"files": {"'$filename'": {"content": "'$(cat $filename)'"}}, "public": true}')
           echo "$filename: $gist_url"
         done
