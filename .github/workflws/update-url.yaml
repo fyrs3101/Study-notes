@@ -1,0 +1,38 @@
+name: Update urls
+
+on:
+  schedule:
+    - cron: '0 18 * * *' # 北京时间每天 2 点执行
+
+jobs:
+  update-gists:
+    name: Update Gists
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Update Gists
+        run: |
+          # Get URLs from the secret
+          urls=$(echo "${{ secrets.URLS }}" | tr ',' '\n')
+
+          for url in $urls
+          do
+            curl -s "$url" > result.txt
+            domain=$(echo "$url" | awk -F[/:] '{print $4}')
+            echo "$domain" > gist_name.txt
+
+            # Update the Gist
+            gist_name=$(cat gist_name.txt)
+            echo "Updating Gist for $url with name $gist_name"
+            uses: gist-action/gist@v2.1.1
+            with:
+              filename: result.txt
+              description: Daily update at 2AM Beijing time
+              public: true
+              gist-name: $gist_name
+              token: ${{ secrets.GITHUB_TOKEN }}
+          done
