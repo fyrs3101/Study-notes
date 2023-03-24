@@ -14,12 +14,12 @@ jobs:
 
     - name: Download URLs and upload to Gist
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        MY_TOKEN: ${{ secrets.MY_TOKEN }}
         URLS: ${{ secrets.URLS }}
       run: |
         for url in $URLS; do
           filename="$(echo $url | sed 's~http[s]*://~~g' | sed 's~www\.~~g').txt"
           curl -o $filename $url
-          gist_url=$(curl -s -XPOST https://api.github.com/gists -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" --data-binary '{"files": {"'$filename'": {"content": "'$(cat $filename)'"}}, "public": true}' | grep -o '"html_url": ".*"' | cut -d'"' -f4)
+          gist_url=$(curl -s -XPOST https://api.github.com/gists -H "Authorization: token $MY_TOKEN" -H "Content-Type: application/json" --data-binary '{"files": {"'$filename'": {"content": "'$(cat $filename)'"}}, "public": true}' | grep -o '"html_url": ".*"' | cut -d'"' -f4)
           echo "$filename: $gist_url"
         done
