@@ -1,6 +1,7 @@
 name: Update urls
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 18 * * *' # 北京时间每天 2 点执行
 
