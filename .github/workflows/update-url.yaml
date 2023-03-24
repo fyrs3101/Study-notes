@@ -6,44 +6,20 @@ on:
     - cron: '0 18 * * *' # 北京时间每天 2 点执行
 
 jobs:
-  fetch-urls:
+  download-and-upload:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Fetch URLs
-      run: |
-        # Fetch URLs
-        URLS=$URLS_SECRET
-        for url in "${URLS[@]}"; do
-          domain=$(echo "$url" | sed -e 's|https://||' -e 's|http://||' -e 's|www\.||' -e 's|/.*||')
-          curl "$url" > "$domain"
-        done
-
-    - name: Upload files to Gist
-      uses: github-script@v4
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const fs = require('fs')
-          const path = require('path')
-
-          const files = fs.readdirSync('.').filter(file => file !== '.git' && file !== '.' && file !== '..')
-          const promises = files.map(async file => {
-            const content = fs.readFileSync(file, 'utf8')
-            const filename = path.basename(file)
-            const response = await github.gists.create({
-              files: {
-                [filename]: {
-                  content: content
-                }
-              },
-              public: false
-            })
-            console.log(`Created Gist: ${response.data.html_url}`)
-          })
-
-          await Promise.all(promises)
+    - name: Download URLs and upload to Gist
       env:
-        URLS_SECRET: ${{ secrets.URLS }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        URLS: ${{ secrets.URLS }}
+      run: |
+        for url in $URLS; do
+          filename="$(echo $url | sed 's~http[s]*://~~g' | sed 's~www\.~~g').txt"
+          curl -o $filename $url
+          gist_url=$(curl -s -XPOST https://api.github.com/gists -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" --data-binary '{"files": {"'$filename'": {"content": "'$(cat $filename)'"}}, "public": true}' | grep -o '"html_url": ".*"' | cut -d'"' -f4)
+          echo "$filename: $gist_url"
+        done
